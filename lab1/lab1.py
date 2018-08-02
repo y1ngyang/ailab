@@ -43,39 +43,62 @@ transitive_rule = IF( AND('(?x) beats (?y)',
 # Define your rules here. We've given you an example rule whose lead you can follow:
 #friend_rule = IF( AND("person (?x)", "person (?y)"), THEN ("friend (?x) (?y)", "friend (?y) (?x)") )
 #person_rule = IF( OR ( 'person (?x)','person (?y)' ), THEN( 'same-person (?x) (?x)' ) )
-#sibling_rule = IF(AND('sibling (?x)', 'sibling (?y)'), THEN('sibling (?x) (?y)', 'sibling (?y) (?x)'))
-child_rule = IF( AND('parent (?x) (?y)'), THEN( 'child (?y) (?x)' ))
-#order matters sibling_rule = IF( AND('person (?x)','person (?y)', 'child (?x)'),NOT('parent (?x)'), THEN('sibling (?x) (?y)'))
-parent_rule = IF( AND('child (?x)', 'parent (?x)', 'child (?y)'), THEN('parent (?x) (?y)'))
-sibling_rule = IF( AND('person (?x)','person (?y)', THEN('sibling (?x) (?y)', 'sibling (?y) (?x)'))
+#same = IF( OR ( 'person (?x) (?y)','person (?y) (?x)', 'person (?x) (?z)', 'person (?z) (?y)' ), THEN( 'same (?x) (?x)' ) )
+#sibling = IF( AND('parent (?x) (?y)', 'parent (?x) (?z)','person (?y)', 'person (?z)'), THEN ("sibling (?z) (?y)", "sibling (?y) (?z)") )
+#sibling = IF( AND('parent (?x) (?y)','parent (?x) (?z)', 'person (?x)', THEN( 'sibling (?z) (?y)', 'sibling (?y) (?z)' ))
+#sibling_rule = IF(AND('sibling (?x) (?z)', 'sibling (?y)'), NOT('same-identity (?y) (?x)', 'same-identity (?x) (?y)'),THEN('sibling (?z) (?y)', 'sibling (?y) (?z)'))
+#child_rule = IF( AND('parent (?x) (?y)'), THEN( 'child (?y) (?x)' ))
+#order matters? sibling_rule = IF( AND('person (?x)','person (?y)', 'child (?x)'),NOT('parent (?x)'), THEN('sibling (?x) (?y)'))
+#parent_rule = IF( AND('child (?x)', 'parent (?x)', 'child (?y)'), THEN('parent (?x) (?y)'))
+#sibling = IF( AND('person (?z)','person (?y)', THEN('sibling (?x) (?y)', 'sibling (?y) (?x)'))
 #cousin_rule = IF( AND('parent (?x) (?y)', 'parent (?z) (?w)'), OR('sibling (?x) (?z)'), THEN('cousin (?y) (?w)', 'cousin (?w) (?y)' ))
-sibling_rule = IF( AND( 'parent (?x) (?y)',
-          'parent (?x) (?z)' ),
-     THEN( 'sibling (?y) (?z)' ))
+# close sibling = IF( AND('parent (?y) (?z)','parent (?x) (?z)'), THEN( 'sibling (?x) (?z)','sibling (?y) (?z)', 'sibling (?y) (?x)' ))
+#closer sibling = IF( AND('parent (?y) (?z)','parent (?x) (?z)'), THEN( 'sibling (?z) (?x)','sibling (?z) (?y)', 'sibling (?x) (?y)' ))
+#self = IF('person (?x), THEN('self (?x) (?x)'))
+#self = IF('parent (?y) (?x)', THEN('same-identity (?x) (?x)'))
+#sibling = IF( AND('parent (?x)'), THEN( 'sibling (?x) (?y)') )
+#sibling = IF( AND('person (?x)', 'person (?y)', 'parent (?y) (?x)'), NOT('self (?x) (?x)'), THEN( 'sibling (?y) (?z)' ) )
+#parent = IF( 'child (?y) (?x)' , THEN( 'parent (?x) (?y)' ))
+#child = IF( 'parent (?x) (?y)' , THEN( 'child (?y) (?x)' ))
+#same = IF( OR ( 'male (?x)','female (?x)' ), THEN( 'same (?x) (?x)' ) )
 
 
-#same_identity = IF( OR ( 'male (?x)','female (?x)' ), THEN( 'same-identity (?x) (?x)' ) )
-#brother_rule = IF( AND( 'male (?x)','parent (?z) (?x)','parent (?z) (?y)', NOT('same-identity (?x) (?y)') ), THEN( 'brother (?x) (?y)' ) )
-#sister_rule = IF( AND( 'female (?x)','parent (?z) (?x)','parent (?z) (?y)', NOT('same-identity (?x) (?y)') ), THEN( 'sister (?x) (?y)' ) )
-#mother_rule = IF( AND( 'female (?x)','parent (?x) (?y)'), THEN( 'mother (?x) (?y)' ) )
-#father_rule = IF( AND( 'male (?x)','parent (?x) (?y)'), THEN( 'father (?x) (?y)' ) )
-#son_rule = IF( AND( 'male (?x)','parent (?y) (?x)'), THEN( 'son (?x) (?y)' ) )
-#daughter_rule = IF( AND( 'female (?x)','parent (?y) (?x)'), THEN( 'daughter (?x) (?y)' ) )
-#cousin_rule = IF( AND( 'parent (?x) (?a)','parent (?y) (?b)', NOT( 'same-identity (?x) (?y)' ) , OR('brother (?x) (?y)', 'sister (?x) (?y)') ), THEN( 'cousin (?a) (?b)' ) )
-#grandparent_rule = IF( AND( 'parent (?x) (?a)','parent (?a) (?y)' ), THEN( 'grandparent (?x) (?y)' ) )
-#grandchild_rule = IF( AND( 'parent (?x) (?a)','parent (?a) (?y)' ), THEN( 'grandchild (?y) (?x)' ) )
+person = IF( AND( 'person (?x)'),
+        THEN( 'self (?x) (?x)'))
+# x = x needed to make the sibling distinction.  
 
+child = IF( AND( 'parent (?x) (?y)'),
+        THEN( 'child (?y) (?x)'))
+# parent is already defined in assumptions so no need to make a rule for it! Turns out they have the same parent and 
+# in the data parent papa mario','parent papa luigi' is the edge os the link between the relationship not 
+# two separate parents. 
 
+sibling = IF( AND( 'parent (?x) (?y)','parent (?x) (?z)',NOT( 'self (?y) (?z)')),
+        THEN( 'sibling (?y) (?z)'))
+# I made the mistake to include x as a sibling when x is root/papa, here they share one parent
 
+grandparent = IF( AND( 'parent (?x) (?y)', 'parent (?y) (?z)'),
+            THEN( 'grandparent (?x) (?z)'))
+# parents x is parent of y and y is parent of z (like a hierarchal line) making root x be grandparent of z
+
+grandchild = IF( AND( 'grandparent (?x) (?y)'),
+            THEN( 'grandchild (?y) (?x)'))
+
+cousin = IF( AND( 'sibling (?x) (?y)', 'parent (?x) (?z)','parent (?y) (?w)'),
+        THEN( 'cousin (?z) (?w)'))
+# they are siblings person x and y. They are  different parents x, y linked to different children z, w. But since the parents
+# are linked by sibling that makes the children cousins.
 
 # Add your rules to this list:
-family_rule = [sibling_rule]
-#[same_person, sibling_rule, child_rule, parent_rule]
+#family_rules = (person, child, sibling) # passed test 10 sibling rule!
+#family_rules = (person, child, sibling, grandparent, grandchild) # passed test 11 grandparent rule!
+family_rules = (person, child, sibling, grandparent, grandchild, cousin) #passed test 12 cousin rule!
+
 
 #You will be given data that includes two kinds of statements:
 
- #   'person (?x)': x is a person
-  #  'parent (?x) (?y)': x is a parent of y 
+#('person (?x)'): x is a person
+#('parent (?x) (?y)'): x is a parent of y 
 
 #Every person in the data set will be explicitly defined as a person.
 
@@ -88,11 +111,11 @@ family_rule = [sibling_rule]
     #'grandchild (?x) (?y)': x is the grandchild of y 
 
 # Uncomment this to test your data on the Simpsons family:
-#pprint(forward_chain(family_rules, simpsons_data, verbose=False))
+pprint(forward_chain(family_rules, simpsons_data, verbose=False))
 
 # These smaller datasets might be helpful for debugging:
 pprint(forward_chain(family_rules, sibling_test_data, verbose=True))
-#pprint(forward_chain(family_rules, grandparent_test_data, verbose=True))
+pprint(forward_chain(family_rules, grandparent_test_data, verbose=True))
 
 # The following should generate 14 cousin relationships, representing 7 pairs
 # of people who are cousins:
@@ -102,7 +125,7 @@ black_family_cousins = [
     if "cousin" in relation ]
 
 # To see if you found them all, uncomment this line:
-#pprint(black_family_cousins)
+pprint(black_family_cousins)
 
 
 #### Part 4: Backward Chaining #########################################

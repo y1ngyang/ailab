@@ -1,0 +1,3 @@
+Completed lab0
+Working on lab1 completed ex 3
+Practiced Networkx for nodes and edges, rule based graph

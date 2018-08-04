@@ -1,3 +1,16 @@
 Completed lab0
 Working on lab1 completed ex 3
 Practiced Networkx for nodes and edges, rule based graph
+
+
+reference:
+giselle. (2018, August). y1ngyang/ailab: added networkx jupyter notebooks (Version v2.0.0). Zenodo. http://doi.org/10.5281/zenodo.1328253
+or
+@misc{giselle_2018_1328253,
+  author       = {giselle},
+  title        = {y1ngyang/ailab: added networkx jupyter notebooks},
+  month        = aug,
+  year         = 2018,
+  doi          = {10.5281/zenodo.1328253},
+  url          = {https://doi.org/10.5281/zenodo.1328253}
+}

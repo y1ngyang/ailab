@@ -33,9 +33,9 @@ transitive_rule = IF( AND('(?x) beats (?y)',
 
 # You can test your rule by uncommenting these pretty print statements
 #  and observing the results printed to your screen after executing lab1.py
-#pprint(forward_chain([transitive_rule], abc_data))
-#pprint(forward_chain([transitive_rule], poker_data))
-#pprint(forward_chain([transitive_rule], minecraft_data))
+pprint(forward_chain([transitive_rule], abc_data))
+pprint(forward_chain([transitive_rule], poker_data))
+pprint(forward_chain([transitive_rule], minecraft_data))
 
 
 #### Part 3: Family Relations #########################################
@@ -146,11 +146,50 @@ def backchain_to_goal_tree(rules, hypothesis):
     (possibly with unbound variables), *not* AND or OR objects.
     Make sure to use simplify(...) to flatten trees where appropriate.
     """
-    raise NotImplementedError
+    #find a rule which has the hypothesis as the conclusion and testing its premises
+    # Rule Z14:
+    IF( AND( '(?x) is a bird',   #in rule Z3       
+             '(?x) does not fly', #opposite of rule Z4
+             '(?x) swims',
+             '(?x) has black and white color' ),
+        THEN( '(?x) is a penguin' ))
+       # penguin = opus?
+    #OR('opus is a penguin', AND(
+    #OR('opus is a bird', 'opus has feathers'), 
+    #AND('opus flies', 'opus lays eggs'))
+    #'opus does not fly',
+    #'opus swims',
+    #'opus has black and white color' ))
+       #Rule Z14: if 
+
+    results = [hypothesis]
+    for rule in rules:
+        consequent = rule.consequent()
+        for expr in consequent:
+            bindings = match(expr, hypothesis)
+            if bindings or expr == hypothesis:
+                antecedent = rule.antecedent()
+                if isinstance(antecedent, str):
+                    new_hypothesis = populate(antecedent, bindings)
+                    results.append(backchain_to_goal_tree(rules, new_hypothesis))
+                    results.append(new_hypothesis)
+                else:
+                    statements = [populate(ante_expr, bindings) for ante_expr in antecedent]
+                    new_results = []
+                    for statement in statements:
+                        new_results.append(backchain_to_goal_tree(rules, statement))
+                    results.append(create_statement(new_results, antecedent))
+    return simplify(OR(results))
+
+
+    
+    
+
+    
 
 
 # Uncomment this to test out your backward chainer:
-# pretty_goal_tree(backchain_to_goal_tree(zookeeper_rules, 'opus is a penguin'))
+#pretty_goal_tree(backchain_to_goal_tree(zookeeper_rules, 'opus is a penguin'))
 
 
 #### Survey #########################################
